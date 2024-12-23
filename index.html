@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chat Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+
+        .chat-box {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        #send-button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        #send-button:hover {
+            background-color: #45a049;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message p {
+            background-color: #f1f1f1;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 70%;
+            word-wrap: break-word;
+            font-size: 16px;
+        }
+
+        .message.user p {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .message.other p {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chat-box" class="chat-box">
+            <!-- Messages will be dynamically added here -->
+        </div>
+        <div class="input-container">
+            <input type="text" id="message-input" placeholder="Type your message..." />
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Get the necessary elements from the DOM
+        const sendButton = document.getElementById("send-button");
+        const messageInput = document.getElementById("message-input");
+        const chatBox = document.getElementById("chat-box");
+
+        // Variable to keep track of the user who is sending the message
+        let currentUser = "user1";  // Toggle this for user1 and user2
+
+        // Function to create a new message element
+        function createMessage(message, user) {
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message");
+            messageElement.classList.add(user === "user1" ? "user" : "other");
+            messageElement.innerHTML = `<p>${message}</p>`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom of the chat box
+        }
+
+        // Send message when clicking the Send button
+        sendButton.addEventListener("click", () => {
+            const message = messageInput.value.trim();
+            if (message !== "") {
+                createMessage(message, currentUser);
+                messageInput.value = "";  // Clear the input
+                currentUser = currentUser === "user1" ? "user2" : "user1"; // Toggle user for next message
+            }
+        });
+
+        // Send message when pressing Enter key
+        messageInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                sendButton.click();
+            }
+        });
+    </script>
+</body>
+</html>
